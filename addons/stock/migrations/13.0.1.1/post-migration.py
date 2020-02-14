@@ -210,8 +210,9 @@ def fill_stock_picking_type_sequence_code(env):
     openupgrade.logged_query(
         env.cr, """
         UPDATE stock_picking_type
-        SET sequence_code = CASE WHEN code = 'incoming' THEN 'IN'
-          WHEN code = 'outgoing' THEN 'OUT'
+        SET sequence_code = CASE WHEN code = 'outgoing' THEN 'OUT'
+          WHEN code = 'incoming' AND name LIKE '%Dropship%' THEN 'DS'
+          WHEN code = 'incoming' AND name NOT LIKE '%Dropship%' THEN 'IN'
           WHEN code = 'internal' AND barcode like '%-PACK' THEN 'PACK'
           WHEN code = 'internal' AND barcode like '%-PICK' THEN 'PICK'
           WHEN code = 'internal' AND barcode like '%-INTERNAL' THEN 'INT'
