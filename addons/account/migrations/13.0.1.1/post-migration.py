@@ -309,7 +309,7 @@ def migration_voucher_moves(env):
         amount_tax, amount_total, state, invoice_payment_state, invoice_date,
         invoice_date_due, invoice_payment_ref, old_voucher_id,
         create_uid, create_date, write_uid, write_date)
-        SELECT message_main_attachment_id, number, date, reference, narration,
+        SELECT message_main_attachment_id, COALESCE(number, '/'), date, reference, narration,
         CASE WHEN voucher_type = 'purchase' THEN 'in_receipt'
         ELSE 'out_receipt' END, journal_id, company_id, currency_id,
         partner_id, tax_amount, amount, state, 'not_paid', account_date,
