@@ -118,6 +118,17 @@ def fill_stock_warehouse_pos_type_id(env):
 
 
 def create_pos_payment_methods(env):
+    for company in env["res.company"].search([]):
+        if not company.account_default_pos_receivable_account_id:
+            company.account_default_pos_receivable_account_id = (
+                env["account.account"].search(
+                    [
+                        ("company_id", "=", company.id),
+                        ("internal_type", "=", "receivable")
+                    ], 
+                    limit=1,
+                )
+            )
     env.cr.execute("""
         SELECT DISTINCT journal_id
         FROM pos_config_journal_rel
