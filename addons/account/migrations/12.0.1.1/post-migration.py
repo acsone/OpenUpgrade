@@ -250,7 +250,7 @@ def migrate(env, version):
     update_res_company_account_setup_steps_states(cr)
     fill_account_journal_alias_id(env)
     fill_account_move_reverse_entry_id(env)
-    recompute_invoice_taxes_add_analytic_tags(env)
+    #recompute_invoice_taxes_add_analytic_tags(env)
     set_default_taxes(env)
     populate_fiscal_years(env)
     openupgrade.load_data(
