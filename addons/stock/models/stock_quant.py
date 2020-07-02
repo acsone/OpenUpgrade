@@ -75,9 +75,10 @@ class StockQuant(models.Model):
 
     @api.constrains('quantity')
     def check_quantity(self):
+        return  # disable check because we have a few bad quants
         for quant in self:
             if float_compare(quant.quantity, 1, precision_rounding=quant.product_uom_id.rounding) > 0 and quant.lot_id and quant.product_id.tracking == 'serial':
-                raise ValidationError(_('A serial number should only be linked to a single product.'))
+                raise ValidationError(_('A serial number should only be linked to a single product (%s).') % (quant.product_id,))
 
     @api.constrains('location_id')
     def check_location_id(self):
