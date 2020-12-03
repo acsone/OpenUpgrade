@@ -322,7 +322,7 @@ def _get_related_account_move(env, svl_vals):
 
 @openupgrade.migrate()
 def migrate(env, version):
-    generate_stock_valuation_layer(env)
+    # generate_stock_valuation_layer(env)
     openupgrade.delete_records_safely_by_xml_id(
         env, [
             "stock_account.default_cost_method",
