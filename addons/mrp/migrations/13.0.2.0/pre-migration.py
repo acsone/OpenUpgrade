@@ -45,6 +45,42 @@ _xmlid_renames = [
 ]
 
 
+def fast_precreation_and_fill_mrp_bom_byproduct(env):
+    """Faster way"""
+    openupgrade.logged_query(
+        env.cr, """
+        ALTER TABLE mrp_bom_byproduct
+        ADD COLUMN company_id integer""",
+    )
+    openupgrade.logged_query(
+        env.cr, """
+        ALTER TABLE mrp_bom_byproduct
+        ADD COLUMN routing_id integer""",
+    )
+    openupgrade.logged_query(
+        env.cr, """
+        UPDATE mrp_bom_byproduct mbb
+        SET company_id = mb.company_id, routing_id = mb.routing_id
+        FROM mrp_bom mb
+        WHERE mb.id = mbb.bom_id""",
+    )
+
+
+def fast_precreation_and_fill_mrp_bom_line(env):
+    openupgrade.logged_query(
+        env.cr, """
+        ALTER TABLE mrp_bom_line
+        ADD COLUMN company_id integer""",
+    )
+    openupgrade.logged_query(
+        env.cr, """
+        UPDATE mrp_bom_line mbl
+        SET company_id = mb.company_id
+        FROM mrp_bom mb
+        WHERE mb.id = mbl.bom_id""",
+    )
+
+
 def fill_bom_product_template_attribute_value(env):
     """ Convert product.attribute.value ids to product.template.attribute.value ids"""
     openupgrade.logged_query(env.cr, """
@@ -82,6 +118,8 @@ def migrate(env, version):
     openupgrade.rename_tables(env.cr, _table_renames)
     if openupgrade.table_exists(env.cr, 'mrp_subproduct'):
         openupgrade.rename_tables(env.cr, _mrp_subproduct_table_renames)
+        fast_precreation_and_fill_mrp_bom_byproduct(env)
+    fast_precreation_and_fill_mrp_bom_line(env)
     openupgrade.rename_fields(env, _field_renames)
     openupgrade.copy_columns(env.cr, _column_copies)
     openupgrade.rename_columns(env.cr, _column_renames)
