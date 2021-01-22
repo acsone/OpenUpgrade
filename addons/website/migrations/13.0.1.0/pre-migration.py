@@ -26,3 +26,4 @@ def migrate(env, version):
     openupgrade.rename_tables(env.cr, _table_renames)
     openupgrade.rename_fields(env, _field_renames)
     openupgrade.rename_xmlids(env.cr, _xmlid_renames)
+    openupgrade.cow_templates_mark_if_equal_to_upstream(env.cr)

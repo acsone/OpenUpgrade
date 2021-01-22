@@ -30,3 +30,4 @@ def migrate(env, version):
     fill_website_rewrite_name(env)
     _fill_website_logo(env)
     openupgrade.load_data(env.cr, 'website', 'migrations/13.0.1.0/noupdate_changes.xml')
+    openupgrade.cow_templates_replicate_upstream(env.cr)
