@@ -447,11 +447,15 @@ def migration_invoice_moves(env):
             account_move_line_id, account_tax_id)
         SELECT aml.id, ailt.tax_id
         FROM account_invoice_line_tax ailt
+        JOIN account_invoice_line ail
+        ON ail.id = ailt.invoice_line_id
+        JOIN account_invoice ai
+        ON ai.id = ail.invoice_id
         JOIN account_move_line aml
         ON aml.old_invoice_line_id = ailt.invoice_line_id
         LEFT JOIN account_move_line_account_tax_rel amlatr
         ON aml.id = amlatr.account_move_line_id AND ailt.tax_id = amlatr.account_tax_id
-        WHERE amlatr.account_tax_id IS NULL
+        WHERE amlatr.account_tax_id IS NULL AND ai.state in ('draft', 'cancel')
         ON CONFLICT DO NOTHING""",
     )
     # Allow pass check_balance constrain
