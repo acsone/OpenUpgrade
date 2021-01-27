@@ -242,6 +242,8 @@ def migration_invoice_moves(env):
             AND ai.commercial_partner_id = aml.partner_id
             AND ((ail.account_analytic_id IS NULL AND aml.analytic_account_id IS NULL)
                 OR ail.account_analytic_id = aml.analytic_account_id)
+            AND ail.spending_authorization_id = aml.spending_authorization_id
+            AND ail.cost_center_id = aml.cost_center_id
         RETURNING aml.id""",
     )
     aml_ids = tuple(x[0] for x in env.cr.fetchall())
