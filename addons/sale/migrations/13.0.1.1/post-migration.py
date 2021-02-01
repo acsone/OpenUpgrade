@@ -125,7 +125,7 @@ def migrate(env, version):
     update_product_attribute_custom_value(env.cr)
     check_optional_products(env)
     fill_order_signed_date(env)
-    fill_confirmation_date(env)
+    # fill_confirmation_date(env)
     check_sale_auto_done(env)
     openupgrade.load_data(env.cr, 'sale', 'migrations/13.0.1.1/noupdate_changes.xml')
     openupgrade.delete_record_translations(
